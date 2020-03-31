@@ -3,6 +3,9 @@ package cs301.Soccer;
 import android.util.Log;
 import cs301.Soccer.soccerPlayer.SoccerPlayer;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -83,7 +86,19 @@ public class SoccerDatabase implements SoccerDB {
      */
     @Override
     public boolean bumpGoals(String firstName, String lastName) {
-        return false;
+        // Finds the key
+        String key = firstName + "##" + lastName;
+
+        // Returns the player
+        SoccerPlayer test = soccerMap.get(key);
+
+        // Bump
+        if (test == null) {
+            return false;
+        } else {
+            test.bumpGoals();
+            return true;
+        }
     }
 
     /**
@@ -296,6 +311,34 @@ public class SoccerDatabase implements SoccerDB {
     // write data to file
     @Override
     public boolean writeData(File file) {
+        try {
+            // Creates a new file writer
+            FileWriter writer = new FileWriter(file);
+
+            // Writes the actual data
+            for (Map.Entry entry: soccerMap.entrySet()) {
+                SoccerPlayer test = (SoccerPlayer)entry.getValue();
+
+                writer.write(logString(test.getFirstName()));
+                writer.write(logString(test.getLastName()));
+                writer.write(logString("" + test.getUniform()));
+                writer.write(logString("" + test.getGoals()));
+                writer.write(logString("" + test.getAssists()));
+                writer.write(logString("" + test.getShots()));
+                writer.write(logString("" + test.getFouls()));
+                writer.write(logString("" + test.getSaves()));
+                writer.write(logString("" + test.getYellowCards()));
+                writer.write(logString("" + test.getRedCards()));
+                writer.write(logString(test.getTeamName()));
+            }
+
+            // Closes the output stream
+            writer.close();
+
+            return true;
+        } catch(IOException e) {
+            Log.d("File I/O","Unable to create output stream");
+        }
         return false;
     }
 
