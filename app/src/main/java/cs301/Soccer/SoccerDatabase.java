@@ -226,7 +226,22 @@ public class SoccerDatabase implements SoccerDB {
     @Override
     // report number of players on a given team (or all players, if null)
     public int numPlayers(String teamName) {
-        return -1;
+        // Return size of hashmap
+        if (teamName == null) {
+            return soccerMap.size();
+        } else {
+            // Creates a counter
+            int num = 0;
+
+            // Iterates through hashmap
+            for (Map.Entry entry: soccerMap.entrySet()) {
+                SoccerPlayer test = (SoccerPlayer)entry.getValue();
+                if (teamName.equals(test.getTeamName())) {
+                    num ++;
+                }
+            }
+            return num;
+        }
     }
 
     /**
