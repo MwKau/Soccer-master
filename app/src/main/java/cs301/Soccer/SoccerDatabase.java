@@ -252,6 +252,28 @@ public class SoccerDatabase implements SoccerDB {
     // get the nTH player
     @Override
     public SoccerPlayer playerNum(int idx, String teamName) {
+        int left = idx;
+
+        // Checks if whole playerbase is checked or a specific team
+        if (teamName == null){
+            for (Map.Entry entry: soccerMap.entrySet()) {
+                SoccerPlayer test = (SoccerPlayer)entry.getValue();
+                if (left == 0) {
+                    return test;
+                }
+                left --;
+            }
+        } else {
+            for (Map.Entry entry: soccerMap.entrySet()) {
+                SoccerPlayer test = (SoccerPlayer)entry.getValue();
+                if (test.getTeamName().equals(teamName)) {
+                    if (left == 0) {
+                        return test;
+                    }
+                    left--;
+                }
+            }
+        }
         return null;
     }
 
